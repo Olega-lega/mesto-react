@@ -1,12 +1,13 @@
 import React from "react";
-function Main({editAvatar, editProfile, addNewCard}) {
+
+function Main({onEditAvatar, onEditProfile, onAddPlace}) {
   return (
     <main className="content">
     <section className="profile content__profile">
       <div className="profile__avatar">
         <img className="profile__image" src="#" alt="Автор" />
         <button className="profile__pencel"
-        onClick={editAvatar}></button>
+        onClick={onEditAvatar}></button>
       </div>
       <div className="profile__form">
         <div className="profile__from-info">
@@ -15,7 +16,7 @@ function Main({editAvatar, editProfile, addNewCard}) {
             className="profile__button-edit"
             type="button"
             aria-label="button-edit"
-            onClick={editProfile}
+            onClick={onEditProfile}
           ></button>
         </div>
         <p className="profile__subtitle">Исследователь океана</p>
@@ -24,7 +25,7 @@ function Main({editAvatar, editProfile, addNewCard}) {
         className="profile__button-add"
         type="button"
         aria-label="button-add"
-        onClick={addNewCard}
+        onClick={onAddPlace}
       ></button>
     </section>
 
