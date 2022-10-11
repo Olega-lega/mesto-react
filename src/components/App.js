@@ -1,5 +1,5 @@
 import '../index.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -7,6 +7,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import EditProfilePopup from './EditProfilePopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
+import api from '../utils/Api';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddCardPopupOpen, setIsAddCardPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
 
   function handleEditAvatarClick(){
     setIsEditAvatarPopupOpen(true)
@@ -30,6 +32,15 @@ function App() {
     setIsAddCardPopupOpen(false);
     setIsImagePopupOpen(false);
   };
+
+  useEffect(() => {
+    api.getInfo()
+      .then((res) => {
+        setCurrentUser(res)
+      })
+      .catch((err) => console.log('Возникла ошибка!'))
+  },[])
+
   return (
     <div className="App">
       <Header />
@@ -37,6 +48,7 @@ function App() {
       onEditAvatar={handleEditAvatarClick}
       onEditProfile={handleEditProfileClick}
       onAddPlace={handleAddPlaceClick}
+      currentUser ={currentUser}
       />
       <Footer />
       <EditAvatarPopup

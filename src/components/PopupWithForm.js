@@ -1,11 +1,13 @@
 import React from 'react';
 
 function PopupWithForm({title, name, children, isOpen, onClose}){
+
   function handleOverlayClose(event) {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
+  
   return (
     <div className={`popup popup_${name} ${isOpen && "popup_open"}`} onClick={handleOverlayClose}>
         <div className="popup__container">
