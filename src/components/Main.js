@@ -1,7 +1,7 @@
-import React,{useState, useEffect} from "react";
+import React,{ useState, useEffect } from "react";
 import Card from "./Cards";
 
-function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser, cards }) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser, cards, onClickCard}) {
 
   const [userName, setUserName] = useState('');
   const [userDescription, setUserDescription] = useState('');
@@ -11,8 +11,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser, cards }) {
     setUserName(currentUser.name)
     setUserAvatar(currentUser.avatar)
     setUserDescription(currentUser.about)
-  }, userName,userDescription,userAvatar)
-
+  }, [currentUser])
 
   return (
     <main className="content">
@@ -43,13 +42,15 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser, cards }) {
     </section>
 
     <section className="element content__element">
-      <ul className="element__cards-list"></ul>
+      <ul className="element__cards-list">
       {cards.map((card) => (
           <Card
             card={card}
-            // cardOpen={onClickCard}
+            cardOpen={onClickCard}
+            key={card._id}
           />
         ))}
+      </ul>
     </section>
   </main>
   )
