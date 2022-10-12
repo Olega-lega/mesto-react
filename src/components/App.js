@@ -16,6 +16,7 @@ function App() {
   const [isAddCardPopupOpen, setIsAddCardPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
 
   function handleEditAvatarClick(){
     setIsEditAvatarPopupOpen(true)
@@ -38,17 +39,29 @@ function App() {
       .then((res) => {
         setCurrentUser(res)
       })
-      .catch((err) => console.log('Возникла ошибка!'))
+      .catch((err) => console.log(`Возникла ошибка! ${err}`))
   },[])
+
+  useEffect(() => {
+    api.getInitialCards()
+      .then(res => {
+        const cardsData = res;
+        setCards(cardsData);
+      })
+      .catch(err => {
+        console.log(`Возникла ошибка! ${err}`);
+      })
+  }, []);
 
   return (
     <div className="App">
       <Header />
       <Main
-      onEditAvatar={handleEditAvatarClick}
-      onEditProfile={handleEditProfileClick}
-      onAddPlace={handleAddPlaceClick}
-      currentUser ={currentUser}
+      onEditAvatar = {handleEditAvatarClick}
+      onEditProfile = {handleEditProfileClick}
+      onAddPlace = {handleAddPlaceClick}
+      currentUser = {currentUser}
+      cards = {cards}
       />
       <Footer />
       <EditAvatarPopup
@@ -86,28 +99,6 @@ function App() {
           </form>
         </div>
       </div>
-
-      <template id="element-template">
-        <li className="element__cards-item">
-          <button
-            className="element__button-delete element__button-delete_hide"
-            type="button"
-            aria-label="button-delete"
-          ></button>
-          <img className="element__cards-img" src="#" alt="" />
-          <div className="element__cards-group">
-            <h2 className="element__cards-title"></h2>
-            <div className="element__button_block">
-              <button
-                className="element__button"
-                type="button"
-                aria-label="button-like"
-              ></button>
-              <span className="element__button_count">0</span>
-            </div>
-          </div>
-        </li>
-      </template>
     </div>
   );
 }

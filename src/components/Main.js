@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from "react";
+import Card from "./Cards";
 
-function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser }) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser, cards }) {
 
   const [userName, setUserName] = useState('');
   const [userDescription, setUserDescription] = useState('');
@@ -43,6 +44,12 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser }) {
 
     <section className="element content__element">
       <ul className="element__cards-list"></ul>
+      {cards.map((card) => (
+          <Card
+            card={card}
+            // cardOpen={onClickCard}
+          />
+        ))}
     </section>
   </main>
   )
