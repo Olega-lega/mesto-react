@@ -8,15 +8,18 @@ import EditProfilePopup from './EditProfilePopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import api from '../utils/Api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddCardPopupOpen, setIsAddCardPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [currentCardDelete, setCurrentCardDelete] = useState({})
 
   function handleEditAvatarClick(){
     setIsEditAvatarPopupOpen(true)
@@ -34,13 +37,40 @@ function App() {
     setIsImagePopupOpen(false);
   };
 
+  function handleCardClick(selectedCard) {
+    setSelectedCard(selectedCard);
+    setIsImagePopupOpen(true);
+  };
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((likeCard) => likeCard._id === currentUser._id);
+    api.changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) => state.map((prevCard) => prevCard._id === card._id ? newCard : prevCard));
+      })
+      .catch((err) => {
+        console.error(`Событие невозможно выполнить. Ошибка ${err}`);
+      });
+  };
+
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+      .then(() => {
+        setCards(cards.filter((prevCard) => prevCard._id !== card._id));
+        setCurrentCardDelete(card);
+      })
+      .catch((err) => {
+        console.log(`Невозможно удалить карточку. Ошибка ${err}`);
+      })
+  };
+
   useEffect(() => {
     api.getInfo()
       .then((res) => {
         setCurrentUser(res)
       })
       .catch((err) => console.log(`Возникла ошибка! ${err}`))
-  },[])
+  }, [])
 
   useEffect(() => {
     api.getInitialCards()
@@ -55,30 +85,34 @@ function App() {
 
   return (
     <div className="App">
+      <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
       onEditAvatar = {handleEditAvatarClick}
       onEditProfile = {handleEditProfileClick}
       onAddPlace = {handleAddPlaceClick}
-      currentUser = {currentUser}
       cards = {cards}
+      onClickCard={handleCardClick}
+      onLikeCard={handleCardLike}
+      onCardDelete={handleCardDelete}
       />
       <Footer />
       <EditAvatarPopup
-      isOpen={isEditAvatarPopupOpen}
-      onClose={closeAllPopups}
+      isOpen = {isEditAvatarPopupOpen}
+      onClose = {closeAllPopups}
       />
       <EditProfilePopup
-      isOpen={isEditProfilePopupOpen}
-      onClose={closeAllPopups}
+      isOpen = {isEditProfilePopupOpen}
+      onClose = {closeAllPopups}
       />
       <AddPlacePopup
-      isOpen={isAddCardPopupOpen}
-      onClose={closeAllPopups}
+      isOpen = {isAddCardPopupOpen}
+      onClose = {closeAllPopups}
       />
       <ImagePopup
-      isOpen={isImagePopupOpen}
-      onClose={closeAllPopups}
+      card = {selectedCard}
+      isOpen = {isImagePopupOpen}
+      onClose = {closeAllPopups}
       />
 
       <div className="popup popup_delete">
@@ -99,6 +133,7 @@ function App() {
           </form>
         </div>
       </div>
+      </CurrentUserContext.Provider>
     </div>
   );
 }
