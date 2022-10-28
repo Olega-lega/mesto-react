@@ -55,7 +55,7 @@ export class Api {
     }).then(this._responseHandler);
   }
 
-  setInfo(data) {
+  setInfo(name, about) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: {
@@ -63,8 +63,8 @@ export class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: data.name,
-        about: data.about,
+        name: name,
+        about: about,
       }),
     }).then(this._responseHandler);
   }

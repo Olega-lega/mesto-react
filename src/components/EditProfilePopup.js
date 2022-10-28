@@ -1,13 +1,37 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PopupWithForm from './PopupWithForm';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
-function EditProfilePopup({isOpen, onClose}) {
+function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
+  const currentUser = useContext(CurrentUserContext);
+  const [values, setValues] = useState({});
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    onUpdateUser({
+      name: values.name,
+      about: values.about
+    });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+   setValues({ name: currentUser.name, about: currentUser.about })
+    };
+  }, [currentUser, isOpen])
+
+  function handleChange(e) {
+    const {name, value} = e.target;
+    setValues({ ...values, [name]: value });
+  }
+
   return(
     <PopupWithForm
       name="edit"
       title="Редактировать профиль"
       isOpen={isOpen}
       onClose={onClose}
+      onSubmit={handleSubmit}
       >
           <input
               className="popup__input popup__input-name"
@@ -17,6 +41,8 @@ function EditProfilePopup({isOpen, onClose}) {
               minLength="2"
               maxLength="40"
               placeholder="Имя Фамилия"
+              value={values.name  || ""}
+              onChange={handleChange}
               required
             />
             <span className="name-input-error popup__span-error"></span>
@@ -28,6 +54,8 @@ function EditProfilePopup({isOpen, onClose}) {
               minLength="2"
               maxLength="200"
               placeholder="Вид деятельности"
+              value={values.about  || ""}
+              onChange={handleChange}
               required
             />
             <span className="job-input-error popup__span-error"></span>

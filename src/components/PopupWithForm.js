@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PopupWithForm({title, name, children, isOpen, onClose}){
+function PopupWithForm({title, name, children, isOpen, onClose, onSubmit}){
 
   function handleOverlayClose(event) {
     if (event.target === event.currentTarget) {
@@ -21,14 +21,14 @@ function PopupWithForm({title, name, children, isOpen, onClose}){
             className=
             {`popup__form popup__form_${name}`}
             name={`popup-${name}`}
+            onSubmit={onSubmit}
             noValidate
           >
             <h2 className="popup__title">{title}</h2>
             {children}
             <button
-              className="popup__button-save popup__button-save_disabled"
+              className="popup__button-save"
               type="submit"
-              disabled
             >
               Сохранить
             </button>

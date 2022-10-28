@@ -64,6 +64,17 @@ function App() {
       })
   };
 
+  function handleUserUpdate(newUser) {
+    api.setInfo(newUser.name, newUser.about)
+      .then(res => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Невозможно сохранить новые данные пользователя. Ошибка ${err}`);
+      })
+  };
+
   useEffect(() => {
     api.getInfo()
       .then((res) => {
@@ -104,6 +115,7 @@ function App() {
       <EditProfilePopup
       isOpen = {isEditProfilePopupOpen}
       onClose = {closeAllPopups}
+      onUpdateUser={handleUserUpdate}
       />
       <AddPlacePopup
       isOpen = {isAddCardPopupOpen}
