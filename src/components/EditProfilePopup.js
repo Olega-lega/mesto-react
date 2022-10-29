@@ -41,7 +41,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
               minLength="2"
               maxLength="40"
               placeholder="Имя Фамилия"
-              value={values.name  || ""}
+              value={values.name}
               onChange={handleChange}
               required
             />

@@ -75,6 +75,17 @@ function App() {
       })
   };
 
+  function handleAvatarUpdate(newAvatar) {
+    api.setAva(newAvatar.avatar)
+      .then(res => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.error(`Невозможно сохранить новый аватар. Ошибка ${err}`);
+      })
+  };
+
   useEffect(() => {
     api.getInfo()
       .then((res) => {
@@ -111,6 +122,7 @@ function App() {
       <EditAvatarPopup
       isOpen = {isEditAvatarPopupOpen}
       onClose = {closeAllPopups}
+      onUpdateAvatar={handleAvatarUpdate}
       />
       <EditProfilePopup
       isOpen = {isEditProfilePopupOpen}
