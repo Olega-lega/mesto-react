@@ -86,6 +86,17 @@ function App() {
       })
   };
 
+  function handleAddCardSubmit(newCard) {
+    api.addNewCard(newCard.name, newCard.link)
+      .then(res => {
+        setCards([res, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Невозможно добавить новую карточку. Ошибка ${err}`);
+      })
+  };
+
   useEffect(() => {
     api.getInfo()
       .then((res) => {
@@ -132,6 +143,7 @@ function App() {
       <AddPlacePopup
       isOpen = {isAddCardPopupOpen}
       onClose = {closeAllPopups}
+      onAddCard={handleAddCardSubmit}
       />
       <ImagePopup
       card = {selectedCard}

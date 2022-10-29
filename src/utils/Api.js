@@ -31,7 +31,7 @@ export class Api {
       .then(this._responseHandler)
   }
 
-  addNewCard(data) {
+  addNewCard(name, link) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: {
@@ -39,8 +39,8 @@ export class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: data.name,
-        link: data.link,
+        name: name,
+        link: link,
       }),
     }).then(this._responseHandler);
   }
