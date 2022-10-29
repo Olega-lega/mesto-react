@@ -31,7 +31,7 @@ export class Api {
       .then(this._responseHandler)
   }
 
-  addNewCard(data) {
+  addNewCard(name, link) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: {
@@ -39,8 +39,8 @@ export class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: data.name,
-        link: data.link,
+        name: name,
+        link: link,
       }),
     }).then(this._responseHandler);
   }
@@ -55,7 +55,7 @@ export class Api {
     }).then(this._responseHandler);
   }
 
-  setInfo(data) {
+  setInfo(name, about) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: {
@@ -63,8 +63,8 @@ export class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: data.name,
-        about: data.about,
+        name: name,
+        about: about,
       }),
     }).then(this._responseHandler);
   }
@@ -77,30 +77,22 @@ export class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        avatar: data.avatar,
+        avatar: data,
       }),
     }).then(this._responseHandler);
   }
 
-  setlike(data) {
-    return fetch(`${this._baseUrl}/cards/${data._id}/likes`, {
-      method: "PUT",
+  changeLikeCardStatus(cardId, setLike) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: setLike ? 'PUT' : 'DELETE',
       headers: {
         authorization: this._token,
         "Content-Type": "application/json",
       },
-    }).then(this._responseHandler);
-  }
+    })
+      .then(this._responseHandler);
+  };
 
-  removeLike(data) {
-    return fetch(`${this._baseUrl}/cards/${data._id}/likes`, {
-      method: "DELETE",
-      headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
-      },
-    }).then(this._responseHandler);
-  }
 }
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-50',

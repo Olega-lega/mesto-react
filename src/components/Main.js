@@ -1,29 +1,22 @@
-import React,{ useState, useEffect } from "react";
+import React,{ useContext } from "react";
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import Card from "./Cards";
 
-function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser, cards, onClickCard}) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, cards, onClickCard, onLikeCard, onCardDelete}) {
 
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('');
-
-  useEffect(() => {
-    setUserName(currentUser.name)
-    setUserAvatar(currentUser.avatar)
-    setUserDescription(currentUser.about)
-  }, [currentUser])
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className="content">
     <section className="profile content__profile">
       <div className="profile__avatar">
-        <img className="profile__image" src={userAvatar} alt="Автор" />
+        <img className="profile__image" src={currentUser.avatar} alt="Автор" />
         <button className="profile__pencel"
         onClick={onEditAvatar}></button>
       </div>
       <div className="profile__form">
         <div className="profile__from-info">
-          <h1 className="profile__title">{userName}</h1>
+          <h1 className="profile__title">{currentUser.name}</h1>
           <button
             className="profile__button-edit"
             type="button"
@@ -31,7 +24,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser, cards, onCl
             onClick={onEditProfile}
           ></button>
         </div>
-        <p className="profile__subtitle">{userDescription}</p>
+        <p className="profile__subtitle">{currentUser.about}</p>
       </div>
       <button
         className="profile__button-add"
@@ -48,6 +41,8 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, currentUser, cards, onCl
             card={card}
             cardOpen={onClickCard}
             key={card._id}
+            onLikeCard={onLikeCard}
+            onCardDelete={onCardDelete}
           />
         ))}
       </ul>
