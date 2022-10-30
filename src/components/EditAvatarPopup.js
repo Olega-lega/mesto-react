@@ -1,10 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useCallback} from 'react';
 import PopupWithForm from './PopupWithForm';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js'
 
 function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
   const currentUser = useContext(CurrentUserContext);
   const [values, setValues] = useState({});
+  const resetForm = useCallback((newValues = {}) => {
+    setValues(newValues);
+  }, [setValues]);
 
 
   function handleSubmit(event) {
@@ -15,10 +18,11 @@ function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
   };
 
   useEffect(() => {
+    resetForm()
     if (isOpen) {
    setValues({ avatar: currentUser.avatar })
-    };
-  }, [currentUser, isOpen])
+    } 
+  }, [currentUser, isOpen, resetForm])
 
   function handleChange(e) {
     const {name, value} = e.target;

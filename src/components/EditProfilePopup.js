@@ -1,10 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useCallback} from 'react';
 import PopupWithForm from './PopupWithForm';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
   const currentUser = useContext(CurrentUserContext);
   const [values, setValues] = useState({});
+  const resetForm = useCallback((newValues = {}) => {
+    setValues(newValues);
+  }, [setValues]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -15,10 +18,11 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
   };
 
   useEffect(() => {
+    resetForm()
     if (isOpen) {
    setValues({ name: currentUser.name, about: currentUser.about })
     };
-  }, [currentUser, isOpen])
+  }, [currentUser, isOpen, resetForm])
 
   function handleChange(e) {
     const {name, value} = e.target;
@@ -41,7 +45,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
               minLength="2"
               maxLength="40"
               placeholder="Имя Фамилия"
-              value={values.name}
+              value={values.name || ""}
               onChange={handleChange}
               required
             />

@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AddPlacePopup({isOpen, onClose, handleChange, onAddCard}) {
+function AddPlacePopup({isOpen, onClose, onAddCard}) {
   
   const [values, setValues] = useState({});
+  const resetForm = useCallback((newValues = {}) => {
+    setValues(newValues);
+  }, [setValues]);
+
+  useEffect( () => {
+    resetForm()
+  },[isOpen,resetForm])
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -21,7 +28,6 @@ function AddPlacePopup({isOpen, onClose, handleChange, onAddCard}) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-
       >
      <input
               className="popup__input popup__input-place"
