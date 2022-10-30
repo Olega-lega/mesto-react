@@ -1,4 +1,4 @@
-import '../index.css';
+
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
@@ -56,7 +56,7 @@ function App() {
   function handleCardDelete(card) {
     api.deleteCard(card._id)
       .then(() => {
-        setCards(cards.filter((prevCard) => prevCard._id !== card._id));
+        setCards(cards => cards.filter((prevCard) => prevCard._id !== card._id));
         setCurrentCardDelete(card);
       })
       .catch((err) => {
@@ -150,25 +150,6 @@ function App() {
       isOpen = {isImagePopupOpen}
       onClose = {closeAllPopups}
       />
-
-      <div className="popup popup_delete">
-        <div className="popup__container popup__container-confirm">
-          <button className="popup__button-close" type="button"></button>
-          <form
-            className="popup__form popup__form_delete"
-            name="deleteCard"
-            id="popup-delete-form"
-          >
-            <h3 className="popup__title popup__title-confirm">Вы уверены?</h3>
-            <button
-              className="popup__button-save popup__button-save_delete"
-              type="submit"
-            >
-              Да
-            </button>
-          </form>
-        </div>
-      </div>
       </CurrentUserContext.Provider>
     </div>
   );
